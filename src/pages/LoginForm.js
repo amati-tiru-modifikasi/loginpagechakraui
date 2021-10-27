@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Flex,Box,Button,Heading,FormControl,FormLabel,Input,CircularProgress,Text } from '@chakra-ui/react'
+import { Flex,Box,Button,Heading,FormControl,FormLabel,Input,CircularProgress,Text,InputGroup,InputRightElement } from '@chakra-ui/react'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
 // komponen
 import { userLogin } from '../utils/mockApi'
@@ -12,6 +13,8 @@ function LoginForm() {
     const [ error, setError ] = useState('');
     const [ isLoading, setIsLoading ] = useState(false);
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
+    const [ showPassword, setShowPassword ] = useState(false);
+    const handleNyontekPassword = () => setShowPassword(!showPassword);
 
     const handleSubmit =  async e => {
         e.preventDefault();
@@ -20,11 +23,13 @@ function LoginForm() {
             await userLogin({ email, password })
             setIsLoggedIn(true);
             setIsLoading(false);
+            setShowPassword(false);
         } catch (error) {
             setError('Invalid username or password')
             setIsLoading(false);
             setEmail('');
             setPassword('');
+            setShowPassword(false);
         }
     }
 
@@ -52,9 +57,14 @@ function LoginForm() {
                                 <FormLabel>Email</FormLabel>
                                 <Input type="email" placeholder="desta@rsuppersahabatan.co.id" size="lg" onChange={e => setEmail(e.currentTarget.value)} />
                             </FormControl>
-                            <FormControl mt={6}>
+                            <FormControl isRequired mt={6}>
                                 <FormLabel>Password</FormLabel>
-                                <Input type="password" placeholder="***************" size="lg" onChange={e => setPassword(e.currentTarget.value)} />
+                                <InputGroup>
+                                    <Input type={showPassword?'text':'password'} placeholder="***************" size="lg" onChange={e => setPassword(e.currentTarget.value)} />
+                                    <InputRightElement width="3rem" mt="3px">
+                                        <Button h="1.5rem" size="sm" onClick={handleNyontekPassword}>{showPassword? <ViewOffIcon />:<ViewIcon />}</Button>
+                                    </InputRightElement>
+                                </InputGroup>
                             </FormControl>
                             <Button mt={4} type="submit" variant="outline" w="full">
                                 {isLoading? (<CircularProgress  isIndeterminate size="24px" color="teal" />) : ('Sign In')}
