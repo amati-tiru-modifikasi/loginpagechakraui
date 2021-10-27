@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 
 // theme
 import { ChakraProvider } from "@chakra-ui/react"
-import { theme } from './themes'
+import theme from './theme'
 
 ReactDOM.render(
   <React.StrictMode>
