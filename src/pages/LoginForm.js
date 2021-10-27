@@ -1,14 +1,29 @@
 import React, { useState } from 'react'
-import { Flex,Box,Button,Heading,FormControl,FormLabel,Input } from '@chakra-ui/react'
+import { Flex,Box,Button,Heading,FormControl,FormLabel,Input,CircularProgress } from '@chakra-ui/react'
+
+// komponen
+import { userLogin } from '../utils/mockApi'
+import ErrorMessage from '../components/ErrorMessage';
 
 function LoginForm() {
 
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
+    const [ error, setError ] = useState('');
+    const [ isLoading, setIsLoading ] = useState(false);
 
-    const handleSubmit = e => {
+    const handleSubmit =  async e => {
         e.preventDefault();
-        console.log(`Email: ${email} dan Password: ${password}`)
+        setIsLoading(true);
+        try {
+            await userLogin({ email, password })
+            setIsLoading(false);
+        } catch (error) {
+            setError('Invalid username or password')
+            setIsLoading(false);
+            setEmail('');
+            setPassword('');
+        }
     }
 
     return (
@@ -19,6 +34,7 @@ function LoginForm() {
                 </Box>
                 <Box my={4} textAlign="left">
                     <form onSubmit={handleSubmit}>
+                        {error && <ErrorMessage message={error} />}
                         <FormControl isRequired>
                             <FormLabel>Email</FormLabel>
                             <Input type="email" placeholder="desta@rsuppersahabatan.co.id" size="lg" onChange={e => setEmail(e.currentTarget.value)} />
@@ -28,7 +44,7 @@ function LoginForm() {
                             <Input type="password" placeholder="***************" size="lg" onChange={e => setPassword(e.currentTarget.value)} />
                         </FormControl>
                         <Button mt={4} type="submit" variant="outline" w="full">
-                            Sign In
+                            {isLoading? (<CircularProgress  isIndeterminate size="24px" color="teal" />) : ('Sign In')}
                         </Button>
                     </form>
                 </Box>
