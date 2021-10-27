@@ -4,7 +4,7 @@ import { Flex,Box,Button,Heading,FormControl,FormLabel,Input } from '@chakra-ui/
 function LoginForm() {
     return (
         <Flex w="full" align="center" justifyContent="center">
-            <Box p={2}>
+            <Box p={8} maxW="500px" borderWidth={1} borderRadius={8} boxShadow="lg">
                 <Box textAlign="center">
                     <Heading>Login</Heading>
                 </Box>
